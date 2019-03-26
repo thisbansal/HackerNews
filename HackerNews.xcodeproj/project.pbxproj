@@ -9,19 +9,42 @@
 /* Begin PBXBuildFile section */
 		1F1DAF6A224633DF00B3C1EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1DAF69224633DF00B3C1EE /* AppDelegate.swift */; };
 		1F1DAF6C224633DF00B3C1EE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1DAF6B224633DF00B3C1EE /* ViewController.swift */; };
-		1F1DAF6F224633DF00B3C1EE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F1DAF6D224633DF00B3C1EE /* Main.storyboard */; };
 		1F1DAF71224633E200B3C1EE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F1DAF70224633E200B3C1EE /* Assets.xcassets */; };
 		1F1DAF74224633E200B3C1EE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F1DAF72224633E200B3C1EE /* LaunchScreen.storyboard */; };
+		1F1DAF7D2246346F00B3C1EE /* BaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1DAF7C2246346F00B3C1EE /* BaseCell.swift */; };
+		1F1DAF7F2246349000B3C1EE /* ListArticles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1DAF7E2246349000B3C1EE /* ListArticles.swift */; };
+		1F1DAF82224634CB00B3C1EE /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1DAF81224634CB00B3C1EE /* Model.swift */; };
+		1F1DAF85224634F700B3C1EE /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1DAF84224634F700B3C1EE /* ApiService.swift */; };
+		1F1DAF8922463EA700B3C1EE /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F1DAF87224637ED00B3C1EE /* SnapKit.framework */; };
+		1F1DAF8A22463EA700B3C1EE /* SnapKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1F1DAF87224637ED00B3C1EE /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		1F1DAF8B22463EA800B3C1EE /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				1F1DAF8A22463EA700B3C1EE /* SnapKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1F1DAF66224633DF00B3C1EE /* HackerNews.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HackerNews.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F1DAF69224633DF00B3C1EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1F1DAF6B224633DF00B3C1EE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		1F1DAF6E224633DF00B3C1EE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1F1DAF70224633E200B3C1EE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1F1DAF73224633E200B3C1EE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1F1DAF75224633E200B3C1EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1F1DAF7C2246346F00B3C1EE /* BaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCell.swift; sourceTree = "<group>"; };
+		1F1DAF7E2246349000B3C1EE /* ListArticles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListArticles.swift; sourceTree = "<group>"; };
+		1F1DAF81224634CB00B3C1EE /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		1F1DAF84224634F700B3C1EE /* ApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiService.swift; sourceTree = "<group>"; };
+		1F1DAF87224637ED00B3C1EE /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F1DAF8922463EA700B3C1EE /* SnapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,6 +64,7 @@
 			children = (
 				1F1DAF68224633DF00B3C1EE /* HackerNews */,
 				1F1DAF67224633DF00B3C1EE /* Products */,
+				1F1DAF86224637ED00B3C1EE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -54,14 +79,49 @@
 		1F1DAF68224633DF00B3C1EE /* HackerNews */ = {
 			isa = PBXGroup;
 			children = (
-				1F1DAF69224633DF00B3C1EE /* AppDelegate.swift */,
-				1F1DAF6B224633DF00B3C1EE /* ViewController.swift */,
-				1F1DAF6D224633DF00B3C1EE /* Main.storyboard */,
+				1F1DAF83224634E500B3C1EE /* ApiService */,
+				1F1DAF80224634A900B3C1EE /* Model */,
+				1F1DAF7B2246344F00B3C1EE /* Controller */,
 				1F1DAF70224633E200B3C1EE /* Assets.xcassets */,
 				1F1DAF72224633E200B3C1EE /* LaunchScreen.storyboard */,
 				1F1DAF75224633E200B3C1EE /* Info.plist */,
 			);
 			path = HackerNews;
+			sourceTree = "<group>";
+		};
+		1F1DAF7B2246344F00B3C1EE /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				1F1DAF69224633DF00B3C1EE /* AppDelegate.swift */,
+				1F1DAF6B224633DF00B3C1EE /* ViewController.swift */,
+				1F1DAF7E2246349000B3C1EE /* ListArticles.swift */,
+				1F1DAF7C2246346F00B3C1EE /* BaseCell.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		1F1DAF80224634A900B3C1EE /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				1F1DAF81224634CB00B3C1EE /* Model.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		1F1DAF83224634E500B3C1EE /* ApiService */ = {
+			isa = PBXGroup;
+			children = (
+				1F1DAF84224634F700B3C1EE /* ApiService.swift */,
+			);
+			path = ApiService;
+			sourceTree = "<group>";
+		};
+		1F1DAF86224637ED00B3C1EE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1F1DAF87224637ED00B3C1EE /* SnapKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -74,6 +134,7 @@
 				1F1DAF62224633DF00B3C1EE /* Sources */,
 				1F1DAF63224633DF00B3C1EE /* Frameworks */,
 				1F1DAF64224633DF00B3C1EE /* Resources */,
+				1F1DAF8B22463EA800B3C1EE /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -124,7 +185,6 @@
 			files = (
 				1F1DAF74224633E200B3C1EE /* LaunchScreen.storyboard in Resources */,
 				1F1DAF71224633E200B3C1EE /* Assets.xcassets in Resources */,
-				1F1DAF6F224633DF00B3C1EE /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,7 +195,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F1DAF82224634CB00B3C1EE /* Model.swift in Sources */,
+				1F1DAF7F2246349000B3C1EE /* ListArticles.swift in Sources */,
+				1F1DAF85224634F700B3C1EE /* ApiService.swift in Sources */,
 				1F1DAF6C224633DF00B3C1EE /* ViewController.swift in Sources */,
+				1F1DAF7D2246346F00B3C1EE /* BaseCell.swift in Sources */,
 				1F1DAF6A224633DF00B3C1EE /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -143,14 +207,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		1F1DAF6D224633DF00B3C1EE /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1F1DAF6E224633DF00B3C1EE /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		1F1DAF72224633E200B3C1EE /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -284,6 +340,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 78ETDP4G36;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = HackerNews/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -292,7 +352,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.sandeep.HackerNews;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -302,6 +362,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 78ETDP4G36;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = HackerNews/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -310,7 +374,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.sandeep.HackerNews;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
