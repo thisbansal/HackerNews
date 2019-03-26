@@ -59,9 +59,6 @@ class ListArticles: BaseCell {
         addSubview(stackView)
         setupStackView()
         stackView.addSubview(label)
-//        label.snp.makeConstraints { (make) in
-//            make.width.height.lessThanOrEqualToSuperview()
-//        }
     }
     
     private func setupStackView() {

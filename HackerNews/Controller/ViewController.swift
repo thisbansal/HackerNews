@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import WebKit
 
 class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
@@ -32,6 +33,15 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         collectionView.backgroundColor = .gray
         collectionView.performBatchUpdates(nil, completion: nil)
         collectionView.register(ListArticles.self, forCellWithReuseIdentifier: cellId)
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if (collectionView.cellForItem(at: indexPath) as? ListArticles) != nil {
+            let layout = UICollectionViewLayout()
+            let webView  = UICollectionViewController(collectionViewLayout: layout)
+            webView.collectionView.backgroundColor = .red
+            navigationController?.pushViewController(webView, animated: true)
+        }
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
