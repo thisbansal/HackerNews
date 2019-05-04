@@ -5,20 +5,19 @@
 //  Created by Sandeep Singh Bansal on 23/3/19.
 //  Copyright © 2019 Sandeep Singh Bansal. All rights reserved.
 //
-
-import UIKit
+import Foundation
 
 //MARK: - Enum
-enum ExtendBaseURL : String {
+public enum ExtendBaseURL : String {
     case topStories = "topstories.json"
     case newStories = "newstories.json"
     case item       = "item"
 }
 
-class ApiService: NSObject {
+class ApiService: URLSessionTask {
     
-    private let baseURL = "https://hacker-news.firebaseio.com/v0"
-    static let shared = ApiService()
+    private let baseURL        = "https://hacker-news.firebaseio.com/v0"
+    private var articleID: Int? = nil
     
     //MARK: - Properties to fetch
     func fetchTopArticlesIds(completion: @escaping ([Int]?) -> ()) {
@@ -26,13 +25,16 @@ class ApiService: NSObject {
     }
     
     func fetchTopArticlesWithIds(articleId: Int,completion: @escaping (Article?) -> ()) {
+        setArticleID(id: articleId)
         fetchArticleWith(urlString: "\(baseURL)/\(ExtendBaseURL.item.rawValue)/\(articleId).json", completion: completion)
     }
     
     private func fetchArticleWith(urlString: String, completion: @escaping ( Article? ) -> () ) {
         let urlValue = URL(string: urlString)
         if let url = urlValue {
-            let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            let configuration = URLSessionConfiguration.default
+            let session       = URLSession(configuration: configuration)
+            let task = session.dataTask(with: url) { (data, response, error) in
                 guard let data = data else {completion(nil); return}
                 do {
                     let article = try JSONDecoder().decode(Article.self, from: data)
@@ -68,5 +70,13 @@ class ApiService: NSObject {
         else {
             completion (nil)
         }
+    }
+    
+    public func setArticleID(id: Int) {
+        self.articleID = id
+    }
+    
+    public func getArticleId() -> Int? {
+        return self.articleID
     }
 }

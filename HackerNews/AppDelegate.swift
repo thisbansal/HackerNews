@@ -18,10 +18,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow()
         window?.makeKeyAndVisible()
         
-        let layout = UICollectionViewFlowLayout()
+        let layout                 = UICollectionViewFlowLayout()
         window?.rootViewController = UINavigationController(rootViewController: ViewController(collectionViewLayout: layout))
         return true
     }
-    
     
 }

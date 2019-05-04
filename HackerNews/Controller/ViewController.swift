@@ -9,29 +9,40 @@
 import UIKit
 import WebKit
 
-class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class ViewController: UICollectionViewController {
     
     // MARK: - Properties
-    let cellId = "cellId"
-    private var articleIDs  : [Int]?
+    let cellId                              = "cellId"
+    let viewTitle                           = "Top Articles"
+    public var articleIDs                   : [Int]?
+    public var topArticles  : [Article?]    = [Article?](repeating: nil, count: 20)
+    public var apiServices : [ApiService]  = []
     
-    // MARK: - Methods
-    private func fetchTopArticlesIds() {
-        ApiService.shared.fetchTopArticlesIds(completion: { (receivedArray: [Int]?) in
-            if let structData = receivedArray {
-                self.articleIDs = structData
-            }
-            self.collectionView?.reloadData()
-        })
-    }
+    private var operation      : Operation = {
+        let operation          = Operation()
+        return operation
+    }()
+    private var operationQueueForArticles : OperationQueue = {
+        let operationQueue     = OperationQueue()
+        operationQueue.name    = "Download article"
+        return operationQueue
+    }()
     
+    //MARK: - Default methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        //fetch the top articles from the HackerNews
         fetchTopArticlesIds()
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.backgroundColor = .gray
-        collectionView.performBatchUpdates(nil, completion: nil)
+        
+        self.navigationController?.navigationBar.barTintColor        = UIColor.rgb(red: 28, green: 28, blue: 28)
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.orange]
+        self.navigationItem.title                                    = viewTitle
+        
+        collectionView.dataSource                                    = self
+        collectionView.delegate                                      = self
+        collectionView.prefetchDataSource                            = self
+        
+        collectionView.backgroundColor                               = UIColor.rgb(red: 28, green: 28, blue: 28)
         collectionView.register(ListArticles.self, forCellWithReuseIdentifier: cellId)
     }
     
@@ -45,18 +56,44 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.articleIDs?.count ?? 0
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ListArticles
-        if let articleId = articleIDs {
-            cell.fetchArticleForCell(articleId: articleId[indexPath.row])
+        guard let range = self.articleIDs?.count else {
+            return 20
         }
-        return cell
+        self.topArticles = [Article?](repeating: nil, count: range)
+        return range
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize.init(width: collectionView.frame.width - 8, height: 120)
+    //MARK: - Get The Ids
+    private func fetchTopArticlesIds() {
+        let apiService = ApiService()
+        apiService.fetchTopArticlesIds(completion: { (receivedArray: [Int]?) in
+            if let structData   = receivedArray {
+                self.articleIDs = structData
+            }
+            self.collectionView?.reloadData()
+        })
+    }
+
+    //MARK: - Get the Articles
+    public func fetchArticle(_ index: Int, completion: @escaping (Bool?) -> ()) {
+        guard let articleID = self.articleIDs?[index] else {return}
+        
+        // if there is already existing data task for the specific news, it means we already loaded it previously / currently loading it
+        // stop re-downloading it by returning this function
+        if apiServices.firstIndex(where: { task in
+            task.getArticleId() == articleID
+        }) != nil {
+            completion(false)
+            return
+        }
+        
+        let apiService = ApiService()
+        apiService.fetchTopArticlesWithIds(articleId: articleID) { (article) in
+            guard let article = article else {return}
+            self.topArticles[index] = article
+            completion(true)
+        }
+        apiServices.append(apiService)
     }
 }
+

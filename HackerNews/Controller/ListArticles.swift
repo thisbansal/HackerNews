@@ -7,15 +7,15 @@
 //
 
 import UIKit
-import SnapKit
 
 class ListArticles: BaseCell {
     
     //MARK: - Properties
-    var article: Article? {
+    var article: Article?
+    {
         didSet {
-            if let article = article?.title {
-                label.text = "\(article))"
+            if let title = article?.title {
+                label.text = "\(title)"
                 label.textColor = .white
             }
         }
@@ -33,37 +33,45 @@ class ListArticles: BaseCell {
         return stackView
     }()
     
+    var backgroundViewForLabel: UIView = {
+        let view                 =  UIView()
+        view.backgroundColor     = .black
+        view.layer.cornerRadius  = 5
+        view.layer.masksToBounds = true
+        
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     var label : UILabel = {
         let label              = UILabel()
         label.numberOfLines    = 0
         label.lineBreakMode    = .byClipping
+        label.textColor        = .white
         label.sizeToFit()
-        
+        label.text             = "Loading"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    //MARK: - Properties
-    func fetchArticleForCell(articleId: Int) {
-        ApiService.shared.fetchTopArticlesWithIds(articleId: articleId) { (article) in
-            if let article = article {
-                DispatchQueue.main.async {
-                    self.article = article
-                }
-            }
-        }
+    
+//    MARK: - Methods
+    override func prepareForReuse() {
+        label.text = nil
     }
     
     override func setupViews() {
         super.setupViews()
-        addSubview(stackView)
-        setupStackView()
-        stackView.addSubview(label)
+        
+        //adding background View for the labels
+        addSubview(backgroundViewForLabel)
+        addConstraintWithFormat(format: "H:|[v0]|", view: backgroundViewForLabel)
+        addConstraintWithFormat(format: "V:|[v0]|", view: backgroundViewForLabel)
+        
+        //adding labels to the background View
+        backgroundViewForLabel.addSubview(label)
+        addConstraintWithFormat(format: "H:|-[v0]-|", view: label)
+        addConstraintWithFormat(format: "V:|-[v0]-|", view: label)
     }
     
-    private func setupStackView() {
-        stackView.snp.makeConstraints { (make) in
-            make.width.height.lessThanOrEqualToSuperview()
-        }
-    }
 }
