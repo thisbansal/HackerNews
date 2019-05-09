@@ -28,40 +28,56 @@ extension UIColor {
 }
 
 extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSourcePrefetching {
-    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        guard let range = self.articleIDs?.count else {
+            return 0
+        }
+        self.topArticles = [Article?](repeating: nil, count: range)
+        return range
+    }
+    /**
+    *   fulfilling UICollectionViewDelegateFlowLayout protocol
+    */
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize.init(width: collectionView.frame.width - 8, height: 120)
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell   = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ListArticles
-        
+
         if let availableArticle = self.topArticles[indexPath.row] {
+            print ("article found")
             cell.article = availableArticle
+            return cell
         }
         
         fetchArticle(indexPath.row) { (isArticleAvailable) in
-            guard let avaiableArticle = isArticleAvailable else {return}
-            if avaiableArticle {
-                DispatchQueue.main.async {
-                    if self.collectionView.indexPathsForVisibleItems.contains(indexPath) {
-                        cell.article = self.topArticles[indexPath.row]
-                    }
+            guard isArticleAvailable != nil else {return}
+            DispatchQueue.main.async {
+                if self.collectionView.indexPathsForVisibleItems.contains(indexPath) {
+//                    cell.article = self.topArticles[indexPath.row]
+                    guard let article = self.topArticles[indexPath.row] else {return}
+                    cell.configure(article)
                 }
             }
         }
         return cell
     }
     
+    
+    /**
+     *   fulfilling UICollectionViewDataSOurcePrefetching protocol
+     */
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         for indexPath in indexPaths {
             if let id  = self.articleIDs?[indexPath.row] {
                 let apiService = ApiService()
                 apiService.fetchTopArticlesWithIds(articleId: id) { (article) in
                     if let article      = article {
-                        self.topArticles.append(article)
+                        self.topArticles[indexPath.row] = article
                     }
                 }
+                apiServices.append(apiService)
             }
         }
     }
@@ -70,7 +86,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
         for indexPath in indexPaths {
             //get the article which is already present in local [topArticle arr]
             guard let article              = self.topArticles[indexPath.row] else {return}
-            
+
             //gets hold of the apiURLSessionTask from [ApiServices arr] for given articleID
             //articleID is based on indexPaths for cancel Prefetching cells
             //After getting the hold of the apiURLSessionTask, cancels the request immediately

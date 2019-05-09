@@ -57,7 +57,13 @@ class ListArticles: BaseCell {
     
 //    MARK: - Methods
     override func prepareForReuse() {
-        label.text = nil
+        article    = nil
+        label.text = "Loading"
+    }
+    
+    func configure(_ articleRecieved: Article) {
+        article = articleRecieved
+        label.text = article?.title
     }
     
     override func setupViews() {
