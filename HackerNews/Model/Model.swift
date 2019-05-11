@@ -20,4 +20,6 @@ public struct Article: Decodable{
     init(id: Int) {
         self.id = id
     }
+    
+    init() {}
 }

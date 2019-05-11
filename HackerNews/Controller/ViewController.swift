@@ -12,21 +12,14 @@ import WebKit
 class ViewController: UICollectionViewController, WKUIDelegate {
     
     // MARK: - Properties
-    let cellId                              = "cellId"
-    let viewTitle                           = "Top Articles"
-    public var articleIDs                   : [Int]?
-    public var topArticles  : [Article?]    = [Article?](repeating: nil, count: 20)
-    public var apiServices : [ApiService]   = []
+    let cellId                                  = "cellId"
+    let viewTitle                               = "Top Articles"
+    public var articleIDs                       : [Int]?
+    public var topArticles  : [Article]         = []
+    public var apiServices  : [Int:ApiService]  = [:]
     
-    private var operation      : Operation = {
-        let operation          = Operation()
-        return operation
-    }()
-    private var operationQueueForArticles : OperationQueue = {
-        let operationQueue     = OperationQueue()
-        operationQueue.name    = "Download article"
-        return operationQueue
-    }()
+    var nextIndexForBatchUpdate  : Int               = 0
+    let batchToPreload      : Int               = 14
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,11 +32,15 @@ class ViewController: UICollectionViewController, WKUIDelegate {
         
         collectionView.dataSource                                    = self
         collectionView.delegate                                      = self
-        collectionView.prefetchDataSource                            = self
         
         collectionView.backgroundColor                               = UIColor.rgb(red: 28, green: 28, blue: 28)
         collectionView.register(ListArticles.self, forCellWithReuseIdentifier: cellId)
     }
+    
+    
+    
+    
+    
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell =  collectionView.cellForItem(at: indexPath) as? ListArticles
@@ -66,24 +63,24 @@ class ViewController: UICollectionViewController, WKUIDelegate {
     }
 
     //MARK: - Get the Articles
-    public func fetchArticle(_ index: Int, completion: @escaping (Bool?) -> ()) {
-        guard let articleID = self.articleIDs?[index] else {return}
-        // if there is already existing data task for the specific news, it means we already loaded it previously / currently loading it
-        // stop re-downloading it by returning this function
-        if apiServices.firstIndex(where: { task in
-            task.getArticleId() == articleID
-        }) != nil {
-            completion(true)
-            return
+    public func fetchArticles(from indexOrigin: Int, completion: @escaping ([Article]?) -> ()) {
+        var emptyArrayList : [Article]  = [Article](repeating: Article(), count: 14)
+        for index in 0..<14 {
+            guard let iD = self.articleIDs?[indexOrigin + index] else {return}
+            let apiService   = ApiService()
+            apiService.fetchTopArticlesWithIds(articleId: iD, completion: { (optionalArticle) in
+                guard let article = optionalArticle else {completion(nil); return}
+                emptyArrayList[index] = article
+                print (article)
+            })
         }
-        
-        let apiService = ApiService()
-        apiService.fetchTopArticlesWithIds(articleId: articleID) { (article) in
-            guard let article = article else {return}
-            self.topArticles[index] = article
-            completion(true)
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+            if emptyArrayList.count == 14 {
+                completion(emptyArrayList)
+                return
+            }
         }
-        apiServices.append(apiService)
     }
 }
 

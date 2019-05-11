@@ -12,14 +12,6 @@ class ListArticles: BaseCell {
     
     //MARK: - Properties
     var article: Article?
-    {
-        didSet {
-            if let title = article?.title {
-                label.text = "\(title)"
-                label.textColor = .white
-            }
-        }
-    }
     
     var stackView : UIStackView = {
         let stackView             = UIStackView()
@@ -62,8 +54,12 @@ class ListArticles: BaseCell {
     }
     
     func configure(_ articleRecieved: Article) {
-        article = articleRecieved
-        label.text = article?.title
+        self.article        = articleRecieved
+        guard let title     = self.article?.title else {
+            self.label.text = "--Title not Avaiable--"
+            return
+        }
+        self.label.text     = title
     }
     
     override func setupViews() {

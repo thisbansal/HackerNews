@@ -27,12 +27,20 @@ extension UIColor {
     }
 }
 
-extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSourcePrefetching {
+extension ViewController: UICollectionViewDelegateFlowLayout {
+    
+    /// Get at index object
+    ///
+    /// - Parameter index: Index of object
+    /// - Returns: Element at index or nil
+    func getArticle(at index: Int) -> Article? {
+        return self.topArticles.indices.contains(index) ? self.topArticles[index] : nil
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let range = self.articleIDs?.count else {
             return 0
         }
-        self.topArticles = [Article?](repeating: nil, count: range)
         return range
     }
     /**
@@ -44,58 +52,48 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell   = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ListArticles
-
-        if let availableArticle = self.topArticles[indexPath.row] {
-            print ("article found")
-            cell.article = availableArticle
+        
+        //check id data is already present locally
+        guard let article = getArticle(at: indexPath.row) else {
+            //fetch the initial data
+            if ((indexPath.row == 0)){
+                //if data is not present locally, following block of code
+                //fetches it and displays it on uicollectionView
+                //Folling piece of code has a bug. If network is slow it might not
+                //be able to show the fetched data at all :(
+                self.fetchArticles(from: nextIndexForBatchUpdate) { (shouldProceed) in
+                    if let articleArray = shouldProceed {
+                        DispatchQueue.main.async {
+                            self.topArticles.append(contentsOf: articleArray)
+                            self.collectionView.indexPathsForVisibleItems.forEach({ (tempIndexPath) in
+                                let tempCell = self.collectionView.cellForItem(at: tempIndexPath) as! ListArticles
+                                tempCell.configure(self.topArticles[tempIndexPath.row])
+                            })
+                            self.nextIndexForBatchUpdate += self.batchToPreload
+                            print ("nextIndexForBatchUpdate is: \(self.nextIndexForBatchUpdate)")
+                        }
+                    }
+                }
+            }
+            
+            
             return cell
         }
+        cell.article = article
+        cell.configure(article)
         
-        fetchArticle(indexPath.row) { (isArticleAvailable) in
-            guard isArticleAvailable != nil else {return}
-            DispatchQueue.main.async {
-                if self.collectionView.indexPathsForVisibleItems.contains(indexPath) {
-//                    cell.article = self.topArticles[indexPath.row]
-                    guard let article = self.topArticles[indexPath.row] else {return}
-                    cell.configure(article)
+        //prefetching
+        if (indexPath.row == (self.nextIndexForBatchUpdate - 4)) {
+            self.fetchArticles(from: self.nextIndexForBatchUpdate) { (shouldProceed) in
+                if let articleArray = shouldProceed {
+                    self.topArticles.append(contentsOf: articleArray)
+                    self.nextIndexForBatchUpdate += self.batchToPreload
+                    print ("nextIndexForBatchUpdate is: \(self.nextIndexForBatchUpdate)")
+                    print("\nTopArticles Count: \(self.topArticles.count)")
                 }
             }
         }
         return cell
-    }
-    
-    
-    /**
-     *   fulfilling UICollectionViewDataSOurcePrefetching protocol
-     */
-    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        for indexPath in indexPaths {
-            if let id  = self.articleIDs?[indexPath.row] {
-                let apiService = ApiService()
-                apiService.fetchTopArticlesWithIds(articleId: id) { (article) in
-                    if let article      = article {
-                        self.topArticles[indexPath.row] = article
-                    }
-                }
-                apiServices.append(apiService)
-            }
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
-        for indexPath in indexPaths {
-            //get the article which is already present in local [topArticle arr]
-            guard let article              = self.topArticles[indexPath.row] else {return}
-
-            //gets hold of the apiURLSessionTask from [ApiServices arr] for given articleID
-            //articleID is based on indexPaths for cancel Prefetching cells
-            //After getting the hold of the apiURLSessionTask, cancels the request immediately
-            guard let apiSessionIndex      = apiServices.firstIndex(where: { (apiService) -> Bool in
-                apiService.getArticleId() == article.id
-            }) else {return}
-            print (apiServices[apiSessionIndex].getArticleId() as Any)
-            apiServices[apiSessionIndex].cancel()
-        }
     }
 }
 
