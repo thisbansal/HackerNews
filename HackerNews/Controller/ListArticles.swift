@@ -13,19 +13,9 @@ class ListArticles: BaseCell {
     //MARK: - Properties
     var article: Article?
     
-    var stackView : UIStackView = {
-        let stackView             = UIStackView()
-        stackView.alignment       = .fill
-        stackView.axis            = .vertical
-        stackView.distribution    = .fillEqually
-        stackView.spacing         = 5
-        stackView.backgroundColor = .black
-        
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }()
+    let activityIndicator = UIActivityIndicatorView()
     
-    var backgroundViewForLabel: UIView = {
+    let backgroundViewForLabel: UIView = {
         let view                 =  UIView()
         view.backgroundColor     = .black
         view.layer.cornerRadius  = 5
@@ -35,13 +25,22 @@ class ListArticles: BaseCell {
         return view
     }()
     
-    var label : UILabel = {
+    let labelForArticleTitle   : UILabel = {
         let label              = UILabel()
         label.numberOfLines    = 0
         label.lineBreakMode    = .byClipping
         label.textColor        = .white
         label.sizeToFit()
-        label.text             = "Loading"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let labelForUrlLink        : UILabel = {
+        let label              = UILabel()
+        label.numberOfLines    = 0
+        label.font             = label.font.withSize(11)
+        label.lineBreakMode    = .byClipping
+        label.textColor        = UIColor.lightGray
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -50,16 +49,34 @@ class ListArticles: BaseCell {
 //    MARK: - Methods
     override func prepareForReuse() {
         article    = nil
-        label.text = "Loading"
+        self.activityIndicator.removeFromSuperview()
     }
     
-    func configure(_ articleRecieved: Article) {
+    
+    //Mark : - Show activity
+    
+    func showActivityView() {
+        self.labelForArticleTitle.text = nil
+        self.addSubview(activityIndicator)
+        addConstraintWithFormat(format: "H:|[v0]|", view: activityIndicator)
+        addConstraintWithFormat(format: "V:|[v0]|", view: activityIndicator)
+        self.activityIndicator.startAnimating()
+    }
+    
+    func stopActivityView() {
+        self.activityIndicator.stopAnimating()
+        self.activityIndicator.removeFromSuperview()
+    }
+    
+    func configure(_ articleRecieved: Article, index: Int) {
         self.article        = articleRecieved
-        guard let title     = self.article?.title else {
-            self.label.text = "--Title not Avaiable--"
+        guard let title     = self.article?.title, let url = self.article?.url else {
+            self.labelForArticleTitle.text = "--Title not Avaiable--"
+            self.labelForUrlLink.text      = "--URL Link not Available--"
             return
         }
-        self.label.text     = title
+        self.labelForArticleTitle.text     = "\(index). \(title)"
+        self.labelForUrlLink.text          = url.absoluteString
     }
     
     override func setupViews() {
@@ -71,9 +88,13 @@ class ListArticles: BaseCell {
         addConstraintWithFormat(format: "V:|[v0]|", view: backgroundViewForLabel)
         
         //adding labels to the background View
-        backgroundViewForLabel.addSubview(label)
-        addConstraintWithFormat(format: "H:|-[v0]-|", view: label)
-        addConstraintWithFormat(format: "V:|-[v0]-|", view: label)
+        backgroundViewForLabel.addSubview(labelForArticleTitle)
+        addConstraintWithFormat(format: "H:|-[v0]-|", view: labelForArticleTitle)
+        addConstraintWithFormat(format: "V:|-16-[v0]", view: labelForArticleTitle)
+        
+        backgroundViewForLabel.addSubview(labelForUrlLink)
+        addConstraintWithFormat(format: "H:|-[v0]|", view: labelForUrlLink)
+        addConstraintWithFormat(format: "V:[v0]-8-|", view: labelForUrlLink)
     }
     
 }

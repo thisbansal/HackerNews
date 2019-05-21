@@ -22,8 +22,9 @@ class WebViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(webView)
-        self.view.addConstraintWithFormat(format: "H:|[v0]|", view: webView)
-        self.view.addConstraintWithFormat(format: "V:|[v0]|", view: webView)
+//        self.view.addConstraintWithFormat(format: "H:|[v0]|", view: webView)
+//        self.view.addConstraintWithFormat(format: "V:|[v0]|", view: webView)
+        self.view = webView
     }
     
     func loadURLForWebView(_ urlString: URL) {

@@ -27,7 +27,18 @@ extension UIColor {
     }
 }
 
-extension ViewController: UICollectionViewDelegateFlowLayout {
+extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSourcePrefetching {
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        for indexPath in indexPaths {
+            self.fetchArticle(index: indexPath.row) { (data) in
+                guard let article = data else {return}
+                print ("\(indexPath.row).  \(article)")
+                self.topArticles[indexPath.row] = article
+            }
+        }
+    }
+    
+    
     
     /// Get at index object
     ///
@@ -37,15 +48,21 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         return self.topArticles.indices.contains(index) ? self.topArticles[index] : nil
     }
     
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let range = self.articleIDs?.count else {
-            return 0
-        }
-        return range
+    /// Get at index object
+    ///
+    /// - Parameter index: Index of object
+    /// - Returns: Element at index or nil
+    func getArticleId(at index: Int) -> Int? {
+        return self.articleIDs.indices.contains(index) ? self.articleIDs[index] : nil
     }
-    /**
-    *   fulfilling UICollectionViewDelegateFlowLayout protocol
-    */
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if (self.topArticles.count == 0) {
+            self.topArticles = [Article?](repeating: nil, count: self.articleIDs.count)
+        }
+        return self.articleIDs.count
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize.init(width: collectionView.frame.width - 8, height: 120)
     }
@@ -53,47 +70,31 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell   = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ListArticles
         
-        //check id data is already present locally
+//        if indexPath.row == self.topArticles.count {
+//            cell.showActivityView()
+//            self.batchFetch(index: indexPath)
+//            return cell
+//        }
+//        print ("About to configure cell with the follwing Article: \(self.topArticles[indexPath.row])")
         guard let article = getArticle(at: indexPath.row) else {
-            //fetch the initial data
-            if ((indexPath.row == 0)){
-                //if data is not present locally, following block of code
-                //fetches it and displays it on uicollectionView
-                //Folling piece of code has a bug. If network is slow it might not
-                //be able to show the fetched data at all :(
-                self.fetchArticles(from: nextIndexForBatchUpdate) { (shouldProceed) in
-                    if let articleArray = shouldProceed {
-                        DispatchQueue.main.async {
-                            self.topArticles.append(contentsOf: articleArray)
-                            self.collectionView.indexPathsForVisibleItems.forEach({ (tempIndexPath) in
-                                let tempCell = self.collectionView.cellForItem(at: tempIndexPath) as! ListArticles
-                                tempCell.configure(self.topArticles[tempIndexPath.row])
-                            })
-                            self.nextIndexForBatchUpdate += self.batchToPreload
-                            print ("nextIndexForBatchUpdate is: \(self.nextIndexForBatchUpdate)")
-                        }
-                    }
-                }
-            }
-            
-            
+            cell.showActivityView()
+            self.batchFetch(index: indexPath)
             return cell
         }
-        cell.article = article
-        cell.configure(article)
+        cell.configure(article, index: indexPath.row)
+        return cell
         
-        //prefetching
-        if (indexPath.row == (self.nextIndexForBatchUpdate - 4)) {
-            self.fetchArticles(from: self.nextIndexForBatchUpdate) { (shouldProceed) in
-                if let articleArray = shouldProceed {
-                    self.topArticles.append(contentsOf: articleArray)
-                    self.nextIndexForBatchUpdate += self.batchToPreload
-                    print ("nextIndexForBatchUpdate is: \(self.nextIndexForBatchUpdate)")
-                    print("\nTopArticles Count: \(self.topArticles.count)")
-                }
+    }
+    
+    private func batchFetch(index indexPath: IndexPath) {
+        self.fetchArticle(index: indexPath.row) { (data) in
+            guard let article = data else {return}
+            DispatchQueue.main.async {
+                self.topArticles[indexPath.row] = article
+                self.collectionView.reloadData()
             }
         }
-        return cell
     }
+    
 }
 

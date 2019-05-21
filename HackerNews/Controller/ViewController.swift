@@ -14,12 +14,8 @@ class ViewController: UICollectionViewController, WKUIDelegate {
     // MARK: - Properties
     let cellId                                  = "cellId"
     let viewTitle                               = "Top Articles"
-    public var articleIDs                       : [Int]?
-    public var topArticles  : [Article]         = []
-    public var apiServices  : [Int:ApiService]  = [:]
-    
-    var nextIndexForBatchUpdate  : Int               = 0
-    let batchToPreload      : Int               = 14
+    public var articleIDs   : [Int]             = []
+    public var topArticles  : [Article?]        = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,20 +28,16 @@ class ViewController: UICollectionViewController, WKUIDelegate {
         
         collectionView.dataSource                                    = self
         collectionView.delegate                                      = self
+        collectionView.prefetchDataSource                            = self
         
         collectionView.backgroundColor                               = UIColor.rgb(red: 28, green: 28, blue: 28)
         collectionView.register(ListArticles.self, forCellWithReuseIdentifier: cellId)
     }
     
-    
-    
-    
-    
-    
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell =  collectionView.cellForItem(at: indexPath) as? ListArticles
+        let cell           =  collectionView.cellForItem(at: indexPath) as? ListArticles
         print (cell?.article ?? "Article is not set")
-        guard let url   = cell?.article?.url else { return }
+        guard let url      = cell?.article?.url else { return }
         let webView        = WebViewController()
         webView.loadURLForWebView(url)
         self.navigationController?.pushViewController(webView, animated: true)
@@ -53,7 +45,7 @@ class ViewController: UICollectionViewController, WKUIDelegate {
     
     //MARK: - Get The Ids
     private func fetchTopArticlesIds() {
-        let apiService = ApiService()
+        let apiService          = ApiService()
         apiService.fetchTopArticlesIds(completion: { (receivedArray: [Int]?) in
             if let structData   = receivedArray {
                 self.articleIDs = structData
@@ -63,24 +55,14 @@ class ViewController: UICollectionViewController, WKUIDelegate {
     }
 
     //MARK: - Get the Articles
-    public func fetchArticles(from indexOrigin: Int, completion: @escaping ([Article]?) -> ()) {
-        var emptyArrayList : [Article]  = [Article](repeating: Article(), count: 14)
-        for index in 0..<14 {
-            guard let iD = self.articleIDs?[indexOrigin + index] else {return}
-            let apiService   = ApiService()
-            apiService.fetchTopArticlesWithIds(articleId: iD, completion: { (optionalArticle) in
-                guard let article = optionalArticle else {completion(nil); return}
-                emptyArrayList[index] = article
-                print (article)
-            })
-        }
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-            if emptyArrayList.count == 14 {
-                completion(emptyArrayList)
-                return
-            }
-        }
+    public func fetchArticle(index: Int, completion: @escaping (Article?) -> ()) {        
+        guard let iD          = getArticleId(at: index) else {completion(nil); return}
+        let apiService        = ApiService()
+        apiService.fetchTopArticlesWithIds(articleId: iD, completion: { (optionalArticle) in
+            guard let article = optionalArticle else {completion(nil);return}
+            completion(article)
+        })
     }
+    
 }
 
