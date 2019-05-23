@@ -27,16 +27,7 @@ extension UIColor {
     }
 }
 
-extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSourcePrefetching {
-    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        for indexPath in indexPaths {
-            self.fetchArticle(index: indexPath.row) { (data) in
-                guard let article = data else {return}
-                print ("\(indexPath.row).  \(article)")
-                self.topArticles[indexPath.row] = article
-            }
-        }
-    }
+extension ViewController: UICollectionViewDelegateFlowLayout {
     
     
     
@@ -60,7 +51,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
         if (self.topArticles.count == 0) {
             self.topArticles = [Article?](repeating: nil, count: self.articleIDs.count)
         }
-        return self.articleIDs.count
+        return self.topArticles.count
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -81,6 +72,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDa
             self.batchFetch(index: indexPath)
             return cell
         }
+        
         cell.configure(article, index: indexPath.row)
         return cell
         

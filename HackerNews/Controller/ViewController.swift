@@ -28,7 +28,6 @@ class ViewController: UICollectionViewController, WKUIDelegate {
         
         collectionView.dataSource                                    = self
         collectionView.delegate                                      = self
-        collectionView.prefetchDataSource                            = self
         
         collectionView.backgroundColor                               = UIColor.rgb(red: 28, green: 28, blue: 28)
         collectionView.register(ListArticles.self, forCellWithReuseIdentifier: cellId)

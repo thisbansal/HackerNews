@@ -11,7 +11,8 @@ import UIKit
 class ListArticles: BaseCell {
     
     //MARK: - Properties
-    var article: Article?
+    var article  : Article?
+    let hKAskUrl : String        = "https://news.ycombinator.com/item?id="
     
     let activityIndicator = UIActivityIndicatorView()
     
@@ -48,7 +49,9 @@ class ListArticles: BaseCell {
     
 //    MARK: - Methods
     override func prepareForReuse() {
-        article    = nil
+        article                   = nil
+        labelForUrlLink.text      = nil
+        labelForArticleTitle.text = nil
         self.activityIndicator.removeFromSuperview()
     }
     
@@ -70,11 +73,13 @@ class ListArticles: BaseCell {
     
     func configure(_ articleRecieved: Article, index: Int) {
         self.article        = articleRecieved
-        guard let title     = self.article?.title, let url = self.article?.url else {
-            self.labelForArticleTitle.text = "--Title not Avaiable--"
-            self.labelForUrlLink.text      = "--URL Link not Available--"
-            return
+        if self.article?.url == nil {
+            if let id = self.article?.id {
+                self.article?.url = URL(string: self.hKAskUrl+"\(id)")
+                print ("\(index). \(String(describing: self.article))")
+            }
         }
+        guard let title     = self.article?.title, let url = self.article?.url else { return }
         self.labelForArticleTitle.text     = "\(index). \(title)"
         self.labelForUrlLink.text          = url.absoluteString
     }
