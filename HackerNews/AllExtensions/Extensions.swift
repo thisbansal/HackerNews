@@ -8,6 +8,12 @@
 
 import UIKit
 
+extension UINavigationController {
+    override open var preferredStatusBarStyle : UIStatusBarStyle {
+        return topViewController?.preferredStatusBarStyle ?? .default
+    }
+}
+
 extension UIView {
     func addConstraintWithFormat(format: String, view: UIView...) {
         var viewsDictionary = [String: UIView]()
@@ -28,8 +34,6 @@ extension UIColor {
 }
 
 extension ViewController: UICollectionViewDelegateFlowLayout {
-    
-    
     
     /// Get at index object
     ///
@@ -61,19 +65,13 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell   = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ListArticles
         
-//        if indexPath.row == self.topArticles.count {
-//            cell.showActivityView()
-//            self.batchFetch(index: indexPath)
-//            return cell
-//        }
-//        print ("About to configure cell with the follwing Article: \(self.topArticles[indexPath.row])")
         guard let article = getArticle(at: indexPath.row) else {
             cell.showActivityView()
             self.batchFetch(index: indexPath)
             return cell
         }
         
-        cell.configure(article, index: indexPath.row)
+        cell.configure(article)
         return cell
         
     }

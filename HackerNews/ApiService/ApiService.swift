@@ -5,6 +5,7 @@
 //  Created by Sandeep Singh Bansal on 23/3/19.
 //  Copyright © 2019 Sandeep Singh Bansal. All rights reserved.
 //
+
 import Foundation
 
 //MARK: - Enum
@@ -53,7 +54,9 @@ class ApiService: URLSessionTask {
     
     private func fetchArticleIds(urlString: String, completion: @escaping ( [Int]? ) -> () ) {
         if let url = URL(string: urlString) {
-            let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            let configuration  = URLSessionConfiguration.default
+            let session        = URLSession(configuration: configuration)
+            let task = session.dataTask(with: url) { (data, response, error) in
                 guard let data = data else {completion(nil); return}
                 do {
                     let idArray = try JSONDecoder().decode([Int].self, from: data)

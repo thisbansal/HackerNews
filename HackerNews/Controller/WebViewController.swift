@@ -21,9 +21,9 @@ class WebViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.navigationBar.tintColor  = UIColor.black
+        
         self.view.addSubview(webView)
-//        self.view.addConstraintWithFormat(format: "H:|[v0]|", view: webView)
-//        self.view.addConstraintWithFormat(format: "V:|[v0]|", view: webView)
         self.view = webView
     }
     

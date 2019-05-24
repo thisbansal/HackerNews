@@ -11,16 +11,14 @@ import UIKit
 class BaseCell: UICollectionViewCell {
     
     //MARK: - Random Color
-    private let color: [UIColor] = [.blue, .brown]
+    let color: [UIColor] = [.blue, .brown]
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
     }
     
-    func setupViews(){
-//        backgroundColor = color.randomElement()
-    }
+    func setupViews(){ }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

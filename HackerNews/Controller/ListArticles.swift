@@ -21,7 +21,6 @@ class ListArticles: BaseCell {
         view.backgroundColor     = .black
         view.layer.cornerRadius  = 5
         view.layer.masksToBounds = true
-        
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -30,7 +29,7 @@ class ListArticles: BaseCell {
         let label              = UILabel()
         label.numberOfLines    = 0
         label.lineBreakMode    = .byClipping
-        label.textColor        = .white
+        label.textColor        = UIColor.rgb(red: 255, green: 166, blue: 137)
         label.sizeToFit()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -41,7 +40,8 @@ class ListArticles: BaseCell {
         label.numberOfLines    = 0
         label.font             = label.font.withSize(11)
         label.lineBreakMode    = .byClipping
-        label.textColor        = UIColor.lightGray
+        label.textColor        = UIColor.rgb(red: 255, green: 193, blue: 173)
+        label.sizeToFit()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -52,7 +52,7 @@ class ListArticles: BaseCell {
         article                   = nil
         labelForUrlLink.text      = nil
         labelForArticleTitle.text = nil
-        self.activityIndicator.removeFromSuperview()
+        stopActivityView()
     }
     
     
@@ -68,25 +68,23 @@ class ListArticles: BaseCell {
     
     func stopActivityView() {
         self.activityIndicator.stopAnimating()
-        self.activityIndicator.removeFromSuperview()
+        self.activityIndicator.isHidden = true
     }
     
-    func configure(_ articleRecieved: Article, index: Int) {
+    func configure(_ articleRecieved: Article) {
         self.article        = articleRecieved
         if self.article?.url == nil {
             if let id = self.article?.id {
                 self.article?.url = URL(string: self.hKAskUrl+"\(id)")
-                print ("\(index). \(String(describing: self.article))")
             }
         }
         guard let title     = self.article?.title, let url = self.article?.url else { return }
-        self.labelForArticleTitle.text     = "\(index). \(title)"
+        self.labelForArticleTitle.text     = "\(title)"
         self.labelForUrlLink.text          = url.absoluteString
     }
     
     override func setupViews() {
         super.setupViews()
-        
         //adding background View for the labels
         addSubview(backgroundViewForLabel)
         addConstraintWithFormat(format: "H:|[v0]|", view: backgroundViewForLabel)
