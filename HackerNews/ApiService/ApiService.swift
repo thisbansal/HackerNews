@@ -26,7 +26,13 @@ class ApiService: URLSessionTask {
         let task                 = session.dataTask(with: requestData) { (data, _, _) in
             guard let data    = data else {completion(nil);  return}
             do {
-                let articles     = try JSONDecoder().decode([Article].self, from: data)
+                var articles     = try JSONDecoder().decode([Article].self, from: data)
+                for (index,article) in articles.enumerated() {
+                    if (article.type == "ask") {
+                        print ("About to remove article: \(article)")
+                        articles.remove(at: index)
+                    }
+                }
                 completion(articles)
             }
             catch {

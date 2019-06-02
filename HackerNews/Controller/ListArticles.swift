@@ -74,8 +74,8 @@ class ListArticles: BaseCell {
     func configure(_ articleRecieved: Article) {
         self.article        = articleRecieved
         guard let title     = self.article?.title, let domain = self.article?.domain else { return }
-        self.labelForArticleTitle.text     =  title
-        self.labelForUrlLink.text          =  domain
+        self.labelForArticleTitle.text     = title
+        self.labelForUrlLink.text          = domain
     }
     
     override func setupViews() {
