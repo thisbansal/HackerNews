@@ -29,7 +29,7 @@ class ListArticles: BaseCell {
         let label              = UILabel()
         label.numberOfLines    = 0
         label.lineBreakMode    = .byClipping
-        label.textColor        = UIColor.rgb(red: 255, green: 166, blue: 137)
+        label.textColor        = UIColor.white
         label.sizeToFit()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -40,7 +40,7 @@ class ListArticles: BaseCell {
         label.numberOfLines    = 0
         label.font             = label.font.withSize(11)
         label.lineBreakMode    = .byClipping
-        label.textColor        = UIColor.rgb(red: 255, green: 193, blue: 173)
+        label.textColor        = UIColor.white
         label.sizeToFit()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -73,14 +73,9 @@ class ListArticles: BaseCell {
     
     func configure(_ articleRecieved: Article) {
         self.article        = articleRecieved
-        if self.article?.url == nil {
-            if let id = self.article?.id {
-                self.article?.url = URL(string: self.hKAskUrl+"\(id)")
-            }
-        }
-        guard let title     = self.article?.title, let url = self.article?.url else { return }
-        self.labelForArticleTitle.text     = "\(title)"
-        self.labelForUrlLink.text          = url.absoluteString
+        guard let title     = self.article?.title, let domain = self.article?.domain else { return }
+        self.labelForArticleTitle.text     =  title
+        self.labelForUrlLink.text          =  domain
     }
     
     override func setupViews() {

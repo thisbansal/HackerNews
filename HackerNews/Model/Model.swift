@@ -10,16 +10,17 @@ import UIKit
 
 //Object model for the article received from Hackernews
 public struct Article: Decodable{
-    var by       : String?
-    var id       : Int?
-    var time     : Int?
-    var title    : String?
-    var type     : String?
-    var url      : URL?
     
-    init(id: Int) {
-        self.id = id
-    }
+    var id              : Int?
+    var time            : Int?
     
-    init() {}
+    var url             : URL?
+    
+    var user            : String?
+    var title           : String?
+    var type            : String?
+    var time_ago        : String?
+    var comments_coutn  : String?
+    var domain          : String?
+    
 }

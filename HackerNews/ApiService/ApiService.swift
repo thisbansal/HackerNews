@@ -8,78 +8,31 @@
 
 import Foundation
 
-//MARK: - Enum
-public enum ExtendBaseURL : String {
-    case topStories = "topstories.json"
-    case newStories = "newstories.json"
-    case item       = "item"
-}
-
 class ApiService: URLSessionTask {
     
-    private let baseURL        = "https://hacker-news.firebaseio.com/v0"
-    private var articleID: Int? = nil
+    private let baseURLForHackerNewsPWAS   = "https://api.hnpwa.com/v0/news/"
     
     //MARK: - Properties to fetch
-    func fetchTopArticlesIds(completion: @escaping ([Int]?) -> ()) {
-        fetchArticleIds(urlString: "\(baseURL)/\(ExtendBaseURL.topStories.rawValue)", completion: completion)
+    func fetchArticlesForBatch(batchNumber: Int, completion: @escaping ([Article]?) -> ()) {
+        let url  =  URL(string: "\(baseURLForHackerNewsPWAS)\(batchNumber).json")
+        guard let fromAddress = url else {completion(nil); return}
+        fetchArticles(requestData: fromAddress, completion: completion)
     }
     
-    func fetchTopArticlesWithIds(articleId: Int,completion: @escaping (Article?) -> ()) {
-        setArticleID(id: articleId)
-        fetchArticleWith(urlString: "\(baseURL)/\(ExtendBaseURL.item.rawValue)/\(articleId).json", completion: completion)
-    }
-    
-    private func fetchArticleWith(urlString: String, completion: @escaping ( Article? ) -> () ) {
-        let urlValue = URL(string: urlString)
-        if let url = urlValue {
-            let configuration = URLSessionConfiguration.default
-            let session       = URLSession(configuration: configuration)
-            let task = session.dataTask(with: url) { (data, response, error) in
-                guard let data = data else {completion(nil); return}
-                do {
-                    let article = try JSONDecoder().decode(Article.self, from: data)
-                    completion(article)
-                }
-                catch {
-                    completion(nil)
-                }
+    private func fetchArticles(requestData: URL, completion: @escaping ([Article]?) -> ()) {
+        print ("request url is: \(String(describing: requestData))")
+        let defaultConfiguration = URLSessionConfiguration.default
+        let session              = URLSession(configuration: defaultConfiguration)
+        let task                 = session.dataTask(with: requestData) { (data, _, _) in
+            guard let data    = data else {completion(nil);  return}
+            do {
+                let articles     = try JSONDecoder().decode([Article].self, from: data)
+                completion(articles)
             }
-            task.resume()
-        }
-        else {
-            completion (nil)
-        }
-    }
-    
-    private func fetchArticleIds(urlString: String, completion: @escaping ( [Int]? ) -> () ) {
-        if let url = URL(string: urlString) {
-            let configuration  = URLSessionConfiguration.default
-            let session        = URLSession(configuration: configuration)
-            let task = session.dataTask(with: url) { (data, response, error) in
-                guard let data = data else {completion(nil); return}
-                do {
-                    let idArray = try JSONDecoder().decode([Int].self, from: data)
-                    DispatchQueue.main.async {
-                        completion(idArray)
-                    }
-                }
-                catch {
-                    completion(nil)
-                }
+            catch {
+                completion (nil)
             }
-            task.resume()
         }
-        else {
-            completion (nil)
-        }
-    }
-    
-    public func setArticleID(id: Int) {
-        self.articleID = id
-    }
-    
-    public func getArticleId() -> Int? {
-        return self.articleID
+        task.resume()
     }
 }

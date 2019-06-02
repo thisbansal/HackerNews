@@ -43,19 +43,12 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         return self.topArticles.indices.contains(index) ? self.topArticles[index] : nil
     }
     
-    /// Get at index object
-    ///
-    /// - Parameter index: Index of object
-    /// - Returns: Element at index or nil
-    func getArticleId(at index: Int) -> Int? {
-        return self.articleIDs.indices.contains(index) ? self.articleIDs[index] : nil
-    }
-    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if (self.topArticles.count == 0) {
-            self.topArticles = [Article?](repeating: nil, count: self.articleIDs.count)
+        var count = self.topArticles.count + 1
+        if (self.currentBatch == 10) {
+            count = self.topArticles.count
         }
-        return self.topArticles.count
+        return count
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -67,7 +60,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         
         guard let article = getArticle(at: indexPath.row) else {
             cell.showActivityView()
-            self.batchFetch(index: indexPath)
+            self.batchFetch()
             return cell
         }
         
@@ -76,12 +69,15 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         
     }
     
-    private func batchFetch(index indexPath: IndexPath) {
-        self.fetchArticle(index: indexPath.row) { (data) in
-            guard let article = data else {return}
-            DispatchQueue.main.async {
-                self.topArticles[indexPath.row] = article
-                self.collectionView.reloadData()
+    private func batchFetch() {
+        self.currentBatch += 1
+        if self.currentBatch <= 10 {
+            self.fetchArticle { (data) in
+                guard let articles = data else {return}
+                DispatchQueue.main.async {
+                    self.topArticles.append(contentsOf: articles)
+                    self.collectionView.reloadData()
+                }
             }
         }
     }

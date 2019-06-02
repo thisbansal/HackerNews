@@ -9,22 +9,20 @@
 import UIKit
 import WebKit
 
-class ViewController: UICollectionViewController, WKUIDelegate {
+class ViewController: UICollectionViewController {
     
     // MARK: - Properties
     let cellId                                  = "cellId"
     let viewTitle                               = "Top Articles"
-    public var articleIDs   : [Int]             = []
+//    public var articleIDs   : [Int]             = []
     public var topArticles  : [Article?]        = []
-
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .default
-    }
+    public var urlRequests  : [ApiService]      = []
+    public var currentBatch : Int               = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //fetch the top articles from the HackerNews
-        fetchTopArticlesIds()
+        //fetches the ids' for the top articles to be loaded from the HackerNews
+//        fetchTopArticlesIds()
         
         self.navigationController?.navigationBar.barTintColor        = UIColor.orange
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
@@ -44,26 +42,15 @@ class ViewController: UICollectionViewController, WKUIDelegate {
         webView.loadURLForWebView(url)
         self.navigationController?.pushViewController(webView, animated: true)
     }
-    
-    //MARK: - Get The Ids
-    private func fetchTopArticlesIds() {
-        let apiService          = ApiService()
-        apiService.fetchTopArticlesIds(completion: { (receivedArray: [Int]?) in
-            if let structData   = receivedArray {
-                self.articleIDs = structData
-            }
-            self.collectionView?.reloadData()
-        })
-    }
 
     //MARK: - Get the Articles
-    public func fetchArticle(index: Int, completion: @escaping (Article?) -> ()) {        
-        guard let iD          = getArticleId(at: index) else {completion(nil); return}
+    public func fetchArticle(completion: @escaping ([Article]?) -> ()) {
         let apiService        = ApiService()
-        apiService.fetchTopArticlesWithIds(articleId: iD, completion: { (optionalArticle) in
-            guard let article = optionalArticle else {completion(nil);return}
-            completion(article)
-        })
+        self.urlRequests.append(apiService)
+        apiService.fetchArticlesForBatch(batchNumber: self.currentBatch) { (data) in
+            guard let data = data else {completion(nil); return}
+            completion(data)
+        }
     }
     
 }
