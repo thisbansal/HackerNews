@@ -26,12 +26,17 @@ class ApiService: URLSessionTask {
         let task                 = session.dataTask(with: requestData) { (data, _, _) in
             guard let data    = data else {completion(nil);  return}
             do {
-                var articles     = try JSONDecoder().decode([Article].self, from: data)
-                for (index,article) in articles.enumerated() {
-                    if (article.type == "ask") {
+                var articles        = try JSONDecoder().decode([Article].self, from: data)
+                var indices : [Int] = []
+                for (index, article) in articles.enumerated() {
+                    if (article.domain == nil) {
                         print ("About to remove article: \(article)")
-                        articles.remove(at: index)
+                        indices.append(index)
                     }
+                }
+                articles.remove(at: indices)
+                for (index, article) in articles.enumerated() {
+                    print ("\(index). \(article) \n")
                 }
                 completion(articles)
             }

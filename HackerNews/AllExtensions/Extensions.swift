@@ -14,6 +14,14 @@ extension UINavigationController {
     }
 }
 
+extension Array {
+    mutating func remove(at indexes: [Int]) {
+        for index in indexes.sorted(by: >) {
+            remove(at: index)
+        }
+    }
+}
+
 extension UIView {
     func addConstraintWithFormat(format: String, view: UIView...) {
         var viewsDictionary = [String: UIView]()
@@ -64,7 +72,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
             return cell
         }
         
-        cell.configure(article)
+        cell.configure(article, indexPath.row)
         return cell
         
     }

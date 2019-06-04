@@ -71,10 +71,14 @@ class ListArticles: BaseCell {
         self.activityIndicator.isHidden = true
     }
     
-    func configure(_ articleRecieved: Article) {
+    func configure(_ articleRecieved: Article,_ index: Int) {
         self.article        = articleRecieved
-        guard let title     = self.article?.title, let domain = self.article?.domain else { return }
-        self.labelForArticleTitle.text     = title
+        guard let title     = self.article?.title, let domain = self.article?.domain else {
+            print ("Blank space: \(index). \(String(describing: article))")
+            return
+        }
+        print ("\(index). \(title)")
+        self.labelForArticleTitle.text     = "\(index). \(title)"
         self.labelForUrlLink.text          = domain
     }
     
