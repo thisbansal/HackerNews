@@ -8,36 +8,32 @@
 
 import Foundation
 
+enum ItemFeeds : String {
+    
+    case news = "https://api.hnpwa.com/v0/news/"
+    case ask    = "https://api.hnpwa.com/v0/ask/"
+    case show    = "https://api.hnpwa.com/v0/show/"
+    case jobs    = "https://api.hnpwa.com/v0/jobs/"
+    
+}
+
 class ApiService: URLSessionTask {
     
-    private let baseURLForHackerNewsPWAS   = "https://api.hnpwa.com/v0/news/"
-    
     //MARK: - Properties to fetch
-    func fetchArticlesForBatch(batchNumber: Int, completion: @escaping ([Article]?) -> ()) {
-        let url  =  URL(string: "\(baseURLForHackerNewsPWAS)\(batchNumber).json")
+    func fetchArticlesForBatch(batchNumber: Int, baseRequest: ItemFeeds, completion: @escaping ([Article]?) -> ()) {
+        print("\(baseRequest.rawValue)\(batchNumber).json")
+        let url  =  URL(string: "\(baseRequest.rawValue)\(batchNumber).json")
         guard let fromAddress = url else {completion(nil); return}
         fetchArticles(requestData: fromAddress, completion: completion)
     }
     
     private func fetchArticles(requestData: URL, completion: @escaping ([Article]?) -> ()) {
-        print ("request url is: \(String(describing: requestData))")
         let defaultConfiguration = URLSessionConfiguration.default
         let session              = URLSession(configuration: defaultConfiguration)
         let task                 = session.dataTask(with: requestData) { (data, _, _) in
             guard let data    = data else {completion(nil);  return}
             do {
-                var articles        = try JSONDecoder().decode([Article].self, from: data)
-                var indices : [Int] = []
-                for (index, article) in articles.enumerated() {
-                    if (article.domain == nil) {
-                        print ("About to remove article: \(article)")
-                        indices.append(index)
-                    }
-                }
-                articles.remove(at: indices)
-                for (index, article) in articles.enumerated() {
-                    print ("\(index). \(article) \n")
-                }
+                let articles        = try JSONDecoder().decode([Article].self, from: data)
                 completion(articles)
             }
             catch {

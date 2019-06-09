@@ -27,6 +27,8 @@ class ListArticles: BaseCell {
     
     let labelForArticleTitle   : UILabel = {
         let label              = UILabel()
+//        label.font.familyName  = "Al Nile"
+        label.font             = UIFont(name: "Avenir-Medium", size: 20.0)
         label.numberOfLines    = 0
         label.lineBreakMode    = .byClipping
         label.textColor        = UIColor.white
@@ -37,8 +39,8 @@ class ListArticles: BaseCell {
     
     let labelForUrlLink        : UILabel = {
         let label              = UILabel()
+        label.font             = UIFont(name: "Menlo-Italic", size: 11.0)
         label.numberOfLines    = 0
-        label.font             = label.font.withSize(11)
         label.lineBreakMode    = .byClipping
         label.textColor        = UIColor.white
         label.sizeToFit()
@@ -71,15 +73,10 @@ class ListArticles: BaseCell {
         self.activityIndicator.isHidden = true
     }
     
-    func configure(_ articleRecieved: Article,_ index: Int) {
+    func configure(articleRecieved: Article, titleText: String, supportingLabelText: String) {
         self.article        = articleRecieved
-        guard let title     = self.article?.title, let domain = self.article?.domain else {
-            print ("Blank space: \(index). \(String(describing: article))")
-            return
-        }
-        print ("\(index). \(title)")
-        self.labelForArticleTitle.text     = "\(index). \(title)"
-        self.labelForUrlLink.text          = domain
+        self.labelForArticleTitle.text     = titleText
+        self.labelForUrlLink.text          = supportingLabelText
     }
     
     override func setupViews() {

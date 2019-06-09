@@ -1,27 +1,26 @@
 //
-//  ViewController.swift
+//  AskViewController.swift
 //  HackerNews
 //
-//  Created by Sandeep Singh Bansal on 23/3/19.
+//  Created by Sandeep Singh Bansal on 9/6/19.
 //  Copyright © 2019 Sandeep Singh Bansal. All rights reserved.
 //
 
 import UIKit
-import WebKit
 
-class ViewController: UICollectionViewController {
-    
+class AskViewController: UICollectionViewController {
+
     // MARK: - Properties
     let cellId                                  = "cellId"
-    let viewTitle                               = "News"
-    public var topArticles  : [Article?]        = []
+    let viewTitle                               = "Ask"
+    public let itemURL                          = "https://news.ycombinator.com/"
+    
+    public var askArticle  : [Article?]        = []
     public var urlRequests  : [ApiService]      = []
     public var currentBatch : Int               = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //fetches the ids' for the top articles to be loaded from the HackerNews
-//        fetchTopArticlesIds()
         
         self.navigationController?.navigationBar.barTintColor        = UIColor.orange
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
@@ -36,21 +35,25 @@ class ViewController: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell           =  collectionView.cellForItem(at: indexPath) as? ListArticles
-        guard let url      = cell?.article?.url else { return }
+        guard let askURL   = cell?.article?.url else {return}
+        guard let url      = getArticleURL(urlString: askURL.absoluteString) else {return}
         let webView        = WebViewController()
         webView.loadURLForWebView(url)
         self.navigationController?.pushViewController(webView, animated: true)
     }
-
+    
+    private func getArticleURL(urlString: String) -> URL? {
+        return URL(string: "\(self.itemURL)\(urlString)")
+    }
+    
     //MARK: - Get the Articles
     public func fetchArticle(completion: @escaping ([Article]?) -> ()) {
         let apiService        = ApiService()
         self.urlRequests.append(apiService)
-        apiService.fetchArticlesForBatch(batchNumber: self.currentBatch, baseRequest: .news) { (data) in
+        apiService.fetchArticlesForBatch(batchNumber: self.currentBatch, baseRequest: .ask) { (data) in
             guard let data = data else {completion(nil); return}
             completion(data)
         }
     }
-    
-}
 
+}

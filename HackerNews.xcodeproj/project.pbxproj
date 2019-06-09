@@ -15,6 +15,14 @@
 		1F1DAF82224634CB00B3C1EE /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1DAF81224634CB00B3C1EE /* Model.swift */; };
 		1F1DAF85224634F700B3C1EE /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1DAF84224634F700B3C1EE /* ApiService.swift */; };
 		1F2F8C9D227E00DE00534F04 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2F8C9C227E00DE00534F04 /* Extensions.swift */; };
+		1FB399FE22AC1607006FB06F /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB399FD22AC1606006FB06F /* CustomTabBarController.swift */; };
+		1FB39A0022ACB2A5006FB06F /* AskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB399FF22ACB2A5006FB06F /* AskViewController.swift */; };
+		1FBEFBEA22ACB43D005212F2 /* ExtentionForVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEFBE922ACB43D005212F2 /* ExtentionForVC.swift */; };
+		1FBEFBEC22ACB4B5005212F2 /* ExtentionForAskVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEFBEB22ACB4B5005212F2 /* ExtentionForAskVC.swift */; };
+		1FBEFBF022AD3D18005212F2 /* ShowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEFBEF22AD3D18005212F2 /* ShowViewController.swift */; };
+		1FBEFBF222AD3E63005212F2 /* JobsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEFBF122AD3E63005212F2 /* JobsViewController.swift */; };
+		1FBEFBF622AD3EDF005212F2 /* ExtentionForJobsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEFBF522AD3EDF005212F2 /* ExtentionForJobsVC.swift */; };
+		1FBEFBF822AD3F01005212F2 /* ExtentionForShowVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FBEFBF722AD3F01005212F2 /* ExtentionForShowVC.swift */; };
 		1FF443AE227E02E0005C136D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FF443AD227E02E0005C136D /* AppDelegate.swift */; };
 		1FF443B0227E1982005C136D /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FF443AF227E1982005C136D /* WebViewController.swift */; };
 /* End PBXBuildFile section */
@@ -43,6 +51,14 @@
 		1F1DAF81224634CB00B3C1EE /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		1F1DAF84224634F700B3C1EE /* ApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiService.swift; sourceTree = "<group>"; };
 		1F2F8C9C227E00DE00534F04 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		1FB399FD22AC1606006FB06F /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
+		1FB399FF22ACB2A5006FB06F /* AskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskViewController.swift; sourceTree = "<group>"; };
+		1FBEFBE922ACB43D005212F2 /* ExtentionForVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtentionForVC.swift; sourceTree = "<group>"; };
+		1FBEFBEB22ACB4B5005212F2 /* ExtentionForAskVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtentionForAskVC.swift; sourceTree = "<group>"; };
+		1FBEFBEF22AD3D18005212F2 /* ShowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowViewController.swift; sourceTree = "<group>"; };
+		1FBEFBF122AD3E63005212F2 /* JobsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobsViewController.swift; sourceTree = "<group>"; };
+		1FBEFBF522AD3EDF005212F2 /* ExtentionForJobsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtentionForJobsVC.swift; sourceTree = "<group>"; };
+		1FBEFBF722AD3F01005212F2 /* ExtentionForShowVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtentionForShowVC.swift; sourceTree = "<group>"; };
 		1FF443AD227E02E0005C136D /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1FF443AF227E1982005C136D /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -93,7 +109,11 @@
 			isa = PBXGroup;
 			children = (
 				1FF443AD227E02E0005C136D /* AppDelegate.swift */,
+				1FB399FD22AC1606006FB06F /* CustomTabBarController.swift */,
 				1F1DAF6B224633DF00B3C1EE /* ViewController.swift */,
+				1FB399FF22ACB2A5006FB06F /* AskViewController.swift */,
+				1FBEFBEF22AD3D18005212F2 /* ShowViewController.swift */,
+				1FBEFBF122AD3E63005212F2 /* JobsViewController.swift */,
 				1F1DAF7E2246349000B3C1EE /* ListArticles.swift */,
 				1F1DAF7C2246346F00B3C1EE /* BaseCell.swift */,
 				1FF443AF227E1982005C136D /* WebViewController.swift */,
@@ -128,6 +148,10 @@
 			isa = PBXGroup;
 			children = (
 				1F2F8C9C227E00DE00534F04 /* Extensions.swift */,
+				1FBEFBE922ACB43D005212F2 /* ExtentionForVC.swift */,
+				1FBEFBEB22ACB4B5005212F2 /* ExtentionForAskVC.swift */,
+				1FBEFBF722AD3F01005212F2 /* ExtentionForShowVC.swift */,
+				1FBEFBF522AD3EDF005212F2 /* ExtentionForJobsVC.swift */,
 			);
 			path = AllExtensions;
 			sourceTree = "<group>";
@@ -205,13 +229,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				1FF443AE227E02E0005C136D /* AppDelegate.swift in Sources */,
+				1FBEFBF022AD3D18005212F2 /* ShowViewController.swift in Sources */,
+				1FBEFBF822AD3F01005212F2 /* ExtentionForShowVC.swift in Sources */,
 				1F1DAF82224634CB00B3C1EE /* Model.swift in Sources */,
 				1F1DAF7F2246349000B3C1EE /* ListArticles.swift in Sources */,
 				1F1DAF85224634F700B3C1EE /* ApiService.swift in Sources */,
 				1F2F8C9D227E00DE00534F04 /* Extensions.swift in Sources */,
+				1FBEFBEA22ACB43D005212F2 /* ExtentionForVC.swift in Sources */,
+				1FBEFBF222AD3E63005212F2 /* JobsViewController.swift in Sources */,
 				1F1DAF6C224633DF00B3C1EE /* ViewController.swift in Sources */,
 				1F1DAF7D2246346F00B3C1EE /* BaseCell.swift in Sources */,
 				1FF443B0227E1982005C136D /* WebViewController.swift in Sources */,
+				1FB39A0022ACB2A5006FB06F /* AskViewController.swift in Sources */,
+				1FB399FE22AC1607006FB06F /* CustomTabBarController.swift in Sources */,
+				1FBEFBEC22ACB4B5005212F2 /* ExtentionForAskVC.swift in Sources */,
+				1FBEFBF622AD3EDF005212F2 /* ExtentionForJobsVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
