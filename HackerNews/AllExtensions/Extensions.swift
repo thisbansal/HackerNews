@@ -41,3 +41,8 @@ extension UIColor {
     }
 }
 
+extension UICollectionViewController {
+    func scrollToTop () {
+        self.collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+    }
+}

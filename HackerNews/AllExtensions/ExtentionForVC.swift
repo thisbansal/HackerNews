@@ -20,7 +20,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         var count = self.topArticles.count + 1
-        if (self.currentBatch == 10) {
+        if (self.currentBatchForVC == 10) {
             count = self.topArticles.count
         }
         return count
@@ -45,12 +45,11 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         cell.configure(articleRecieved: article, titleText: title, supportingLabelText: domain)
         
         return cell
-        
     }
     
     private func batchFetch() {
-        self.currentBatch += 1
-        if self.currentBatch <= 10 {
+        self.currentBatchForVC += 1
+        if self.currentBatchForVC <= 10 {
             self.fetchArticle { (data) in
                 guard var articles = data else {return}
                 var indices : [Int] = []

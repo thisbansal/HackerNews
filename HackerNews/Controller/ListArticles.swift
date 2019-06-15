@@ -14,11 +14,15 @@ class ListArticles: BaseCell {
     var article  : Article?
     let hKAskUrl : String        = "https://news.ycombinator.com/item?id="
     
-    let activityIndicator = UIActivityIndicatorView()
+    let activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
+        activityIndicator.tintColor = Color.darkBackground.value
+        return activityIndicator
+    }()
     
     let backgroundViewForLabel: UIView = {
         let view                 =  UIView()
-        view.backgroundColor     = .black
+        view.backgroundColor     = Color.lightBackground.value
         view.layer.cornerRadius  = 5
         view.layer.masksToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -27,11 +31,10 @@ class ListArticles: BaseCell {
     
     let labelForArticleTitle   : UILabel = {
         let label              = UILabel()
-//        label.font.familyName  = "Al Nile"
         label.font             = UIFont(name: "Avenir-Medium", size: 20.0)
         label.numberOfLines    = 0
         label.lineBreakMode    = .byClipping
-        label.textColor        = UIColor.white
+        label.textColor        = Color.darkText.value
         label.sizeToFit()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -42,7 +45,7 @@ class ListArticles: BaseCell {
         label.font             = UIFont(name: "Menlo-Italic", size: 11.0)
         label.numberOfLines    = 0
         label.lineBreakMode    = .byClipping
-        label.textColor        = UIColor.white
+        label.textColor        = Color.darkText.value
         label.sizeToFit()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -59,7 +62,6 @@ class ListArticles: BaseCell {
     
     
     //Mark : - Show activity
-    
     func showActivityView() {
         self.labelForArticleTitle.text = nil
         self.addSubview(activityIndicator)
@@ -81,6 +83,7 @@ class ListArticles: BaseCell {
     
     override func setupViews() {
         super.setupViews()
+        
         //adding background View for the labels
         addSubview(backgroundViewForLabel)
         addConstraintWithFormat(format: "H:|[v0]|", view: backgroundViewForLabel)

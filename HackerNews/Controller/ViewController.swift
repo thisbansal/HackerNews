@@ -16,26 +16,30 @@ class ViewController: UICollectionViewController {
     let viewTitle                               = "News"
     public var topArticles  : [Article?]        = []
     public var urlRequests  : [ApiService]      = []
-    public var currentBatch : Int               = 0
+    public var currentBatchForVC : Int          = 0
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         //fetches the ids' for the top articles to be loaded from the HackerNews
-//        fetchTopArticlesIds()
         
-        self.navigationController?.navigationBar.barTintColor        = UIColor.orange
-        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
+        self.navigationController?.navigationBar.barTintColor        = Color.darkBackground.value
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: Color.lightText.value]
         self.navigationItem.title                                    = viewTitle
         
         collectionView.dataSource                                    = self
         collectionView.delegate                                      = self
         
-        collectionView.backgroundColor                               = UIColor.rgb(red: 28, green: 28, blue: 28)
+        collectionView.backgroundColor                               = Color.darkBackground.value
         collectionView.register(ListArticles.self, forCellWithReuseIdentifier: cellId)
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell           =  collectionView.cellForItem(at: indexPath) as? ListArticles
+        print(String(describing: self.topArticles.count))
         guard let url      = cell?.article?.url else { return }
         let webView        = WebViewController()
         webView.loadURLForWebView(url)
@@ -46,7 +50,7 @@ class ViewController: UICollectionViewController {
     public func fetchArticle(completion: @escaping ([Article]?) -> ()) {
         let apiService        = ApiService()
         self.urlRequests.append(apiService)
-        apiService.fetchArticlesForBatch(batchNumber: self.currentBatch, baseRequest: .news) { (data) in
+        apiService.fetchArticlesForBatch(batchNumber: self.currentBatchForVC, baseRequest: .news) { (data) in
             guard let data = data else {completion(nil); return}
             completion(data)
         }

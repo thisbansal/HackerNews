@@ -20,13 +20,28 @@ enum ItemFeeds : String {
 class ApiService: URLSessionTask {
     
     //MARK: - Properties to fetch
+    /// Takes the input paramenters required to be fetched later. This method is just
+    /// an intermediate place where the base URL is formed based on the input
+    /// paramenters it takes. Later base URL is combined with batchNumber to form an
+    /// absolute URL and sent to the function to download the data.
+    ///
+    /// - Parameters:
+    ///   - batchNumber: holds the track of current batch number
+    ///   - baseRequest: determines what address to call to in order to receive data
+    ///   - completion: returns the fetched data
     func fetchArticlesForBatch(batchNumber: Int, baseRequest: ItemFeeds, completion: @escaping ([Article]?) -> ()) {
-        print("\(baseRequest.rawValue)\(batchNumber).json")
         let url  =  URL(string: "\(baseRequest.rawValue)\(batchNumber).json")
+        print("About to fetch: \(String(describing: url))")
         guard let fromAddress = url else {completion(nil); return}
         fetchArticles(requestData: fromAddress, completion: completion)
     }
     
+    /// Fetches the data from the given article. It returns either nil, if data is not available
+    /// Or returns an array of actual "Article".
+    ///
+    /// - Parameters:
+    ///   - requestData: URL to fetch the data from
+    ///   - completion: closure, either returns nil or array of Article
     private func fetchArticles(requestData: URL, completion: @escaping ([Article]?) -> ()) {
         let defaultConfiguration = URLSessionConfiguration.default
         let session              = URLSession(configuration: defaultConfiguration)

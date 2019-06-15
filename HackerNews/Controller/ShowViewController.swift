@@ -18,17 +18,21 @@ class ShowViewController: UICollectionViewController {
     public var urlRequests  : [ApiService]      = []
     public var currentBatch : Int               = 0
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBar.barTintColor        = UIColor.orange
-        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
+        self.navigationController?.navigationBar.barTintColor        = Color.darkBackground.value
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: Color.lightText.value]
         self.navigationItem.title                                    = viewTitle
         
         collectionView.dataSource                                    = self
         collectionView.delegate                                      = self
         
-        collectionView.backgroundColor                               = UIColor.rgb(red: 28, green: 28, blue: 28)
+        collectionView.backgroundColor                               = Color.darkBackground.value
         collectionView.register(ListArticles.self, forCellWithReuseIdentifier: cellId)
     }
     
