@@ -15,8 +15,9 @@ class ListArticles: BaseCell {
     let hKAskUrl : String        = "https://news.ycombinator.com/item?id="
     
     let activityIndicator: UIActivityIndicatorView = {
-        let activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
-        activityIndicator.tintColor = Color.darkBackground.value
+        let activityIndicator   = UIActivityIndicatorView(style: .whiteLarge)
+        activityIndicator.color = Color.darkBackground.value
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         return activityIndicator
     }()
     
@@ -31,7 +32,7 @@ class ListArticles: BaseCell {
     
     let labelForArticleTitle   : UILabel = {
         let label              = UILabel()
-        label.font             = UIFont(name: "Avenir-Medium", size: 20.0)
+        label.font             = UIFont(name: "Avenir-Medium", size: 16.0)
         label.numberOfLines    = 0
         label.lineBreakMode    = .byClipping
         label.textColor        = Color.darkText.value
@@ -51,7 +52,6 @@ class ListArticles: BaseCell {
         return label
     }()
     
-    
 //    MARK: - Methods
     override func prepareForReuse() {
         article                   = nil
@@ -64,9 +64,9 @@ class ListArticles: BaseCell {
     //Mark : - Show activity
     func showActivityView() {
         self.labelForArticleTitle.text = nil
-        self.addSubview(activityIndicator)
-        addConstraintWithFormat(format: "H:|[v0]|", view: activityIndicator)
-        addConstraintWithFormat(format: "V:|[v0]|", view: activityIndicator)
+        contentView.addSubview(activityIndicator)
+        activityIndicator.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
         self.activityIndicator.startAnimating()
     }
     
@@ -76,7 +76,7 @@ class ListArticles: BaseCell {
     }
     
     func configure(articleRecieved: Article, titleText: String, supportingLabelText: String) {
-        self.article        = articleRecieved
+        self.article                       = articleRecieved
         self.labelForArticleTitle.text     = titleText
         self.labelForUrlLink.text          = supportingLabelText
     }
@@ -84,19 +84,22 @@ class ListArticles: BaseCell {
     override func setupViews() {
         super.setupViews()
         
-        //adding background View for the labels
-        addSubview(backgroundViewForLabel)
-        addConstraintWithFormat(format: "H:|[v0]|", view: backgroundViewForLabel)
-        addConstraintWithFormat(format: "V:|[v0]|", view: backgroundViewForLabel)
+        contentView.addSubview(backgroundViewForLabel)
+        backgroundViewForLabel.topAnchor.constraint(equalTo: contentView.topAnchor).isActive           = true
+        backgroundViewForLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive   = true
+        backgroundViewForLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        backgroundViewForLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive     = true
         
-        //adding labels to the background View
         backgroundViewForLabel.addSubview(labelForArticleTitle)
-        addConstraintWithFormat(format: "H:|-[v0]-|", view: labelForArticleTitle)
-        addConstraintWithFormat(format: "V:|-16-[v0]", view: labelForArticleTitle)
+        labelForArticleTitle.topAnchor.constraint(equalTo: backgroundViewForLabel.topAnchor, constant: 8).isActive            = true
+        labelForArticleTitle.leadingAnchor.constraint(equalTo: backgroundViewForLabel.leadingAnchor, constant: 8).isActive    = true
+        labelForArticleTitle.trailingAnchor.constraint(equalTo: backgroundViewForLabel.trailingAnchor, constant: -8).isActive = true
         
         backgroundViewForLabel.addSubview(labelForUrlLink)
-        addConstraintWithFormat(format: "H:|-[v0]|", view: labelForUrlLink)
-        addConstraintWithFormat(format: "V:[v0]-8-|", view: labelForUrlLink)
+//        labelForUrlLink.topAnchor.constraint(equalTo: labelForArticleTitle.lastBaselineAnchor, constant: 8).isActive           = true
+        labelForUrlLink.leadingAnchor.constraint(equalTo: backgroundViewForLabel.leadingAnchor, constant: 8).isActive          = true
+        labelForUrlLink.trailingAnchor.constraint(equalTo: backgroundViewForLabel.trailingAnchor, constant: -8).isActive       = true
+        labelForUrlLink.lastBaselineAnchor.constraint(equalTo: backgroundViewForLabel.bottomAnchor, constant: -8).isActive     = true
     }
     
 }

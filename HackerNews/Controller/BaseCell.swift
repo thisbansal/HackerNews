@@ -10,11 +10,9 @@ import UIKit
 
 class BaseCell: UICollectionViewCell {
     
-    //MARK: - Random Color
-    let color: [UIColor] = [.blue, .brown]
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
+        contentView.backgroundColor = Color.darkBackground.value
         setupViews()
     }
     

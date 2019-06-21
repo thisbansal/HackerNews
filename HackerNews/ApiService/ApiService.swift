@@ -31,7 +31,6 @@ class ApiService: URLSessionTask {
     ///   - completion: returns the fetched data
     func fetchArticlesForBatch(batchNumber: Int, baseRequest: ItemFeeds, completion: @escaping ([Article]?) -> ()) {
         let url  =  URL(string: "\(baseRequest.rawValue)\(batchNumber).json")
-        print("About to fetch: \(String(describing: url))")
         guard let fromAddress = url else {completion(nil); return}
         fetchArticles(requestData: fromAddress, completion: completion)
     }

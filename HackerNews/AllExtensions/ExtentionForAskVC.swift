@@ -26,8 +26,24 @@ extension AskViewController: UICollectionViewDelegateFlowLayout {
         return count
     }
     
+    private func getEstimatedHeightAndWidthOfCell(fontSize: CGFloat, nameOfFont: String, labelString: String) -> CGSize {
+        let width = view.frame.width - 12
+        let size  = CGSize(width: width, height: 80)
+        let attributes = [NSAttributedString.Key.font: UIFont(name: nameOfFont, size: fontSize)]
+        
+        let estimatedFrame = NSString(string: labelString).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes as [NSAttributedString.Key : Any], context: nil)
+        return (CGSize(width: view.frame.width, height: estimatedFrame.height))
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize.init(width: collectionView.frame.width - 8, height: 120)
+        
+        if let title = getArticle(at: indexPath.row)?.title, let bodyLabel = getArticle(at: indexPath.row)?.user {
+            let titleLabelSize =  getEstimatedHeightAndWidthOfCell(fontSize: 16.0, nameOfFont: "Avenir-Medium", labelString: title)
+            let bodyLabelSize  = getEstimatedHeightAndWidthOfCell(fontSize: 11.0, nameOfFont: "Menlo-Italic", labelString: bodyLabel)
+            return CGSize(width: view.frame.width, height: bodyLabelSize.height + titleLabelSize.height + 30)
+        }
+        
+        return CGSize.init(width: collectionView.frame.width - 8, height: 40)
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

@@ -39,7 +39,6 @@ class ViewController: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell           =  collectionView.cellForItem(at: indexPath) as? ListArticles
-        print(String(describing: self.topArticles.count))
         guard let url      = cell?.article?.url else { return }
         let webView        = WebViewController()
         webView.loadURLForWebView(url)
