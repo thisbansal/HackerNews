@@ -16,15 +16,15 @@ class ListArticles: BaseCell {
     
     let activityIndicator: UIActivityIndicatorView = {
         let activityIndicator   = UIActivityIndicatorView(style: .whiteLarge)
-        activityIndicator.color = Color.darkBackground.value
+        activityIndicator.color = Color.lightBackground.value
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         return activityIndicator
     }()
     
     let backgroundViewForLabel: UIView = {
         let view                 =  UIView()
-        view.backgroundColor     = Color.lightBackground.value
-        view.layer.cornerRadius  = 5
+        view.backgroundColor     = Color.lightBackgroundLevel2.value
+        view.layer.cornerRadius  = 2
         view.layer.masksToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -35,7 +35,7 @@ class ListArticles: BaseCell {
         label.font             = UIFont(name: "Avenir-Medium", size: 16.0)
         label.numberOfLines    = 0
         label.lineBreakMode    = .byClipping
-        label.textColor        = Color.darkText.value
+        label.textColor        = Color.lightText.value
         label.sizeToFit()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -46,7 +46,7 @@ class ListArticles: BaseCell {
         label.font             = UIFont(name: "Menlo-Italic", size: 11.0)
         label.numberOfLines    = 0
         label.lineBreakMode    = .byClipping
-        label.textColor        = Color.darkText.value
+        label.textColor        = Color.lightText.value
         label.sizeToFit()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -96,7 +96,6 @@ class ListArticles: BaseCell {
         labelForArticleTitle.trailingAnchor.constraint(equalTo: backgroundViewForLabel.trailingAnchor, constant: -8).isActive = true
         
         backgroundViewForLabel.addSubview(labelForUrlLink)
-//        labelForUrlLink.topAnchor.constraint(equalTo: labelForArticleTitle.lastBaselineAnchor, constant: 8).isActive           = true
         labelForUrlLink.leadingAnchor.constraint(equalTo: backgroundViewForLabel.leadingAnchor, constant: 8).isActive          = true
         labelForUrlLink.trailingAnchor.constraint(equalTo: backgroundViewForLabel.trailingAnchor, constant: -8).isActive       = true
         labelForUrlLink.lastBaselineAnchor.constraint(equalTo: backgroundViewForLabel.bottomAnchor, constant: -8).isActive     = true

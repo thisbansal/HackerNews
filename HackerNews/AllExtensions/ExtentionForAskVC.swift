@@ -35,12 +35,14 @@ extension AskViewController: UICollectionViewDelegateFlowLayout {
         return (CGSize(width: view.frame.width, height: estimatedFrame.height))
     }
     
+    
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         if let title = getArticle(at: indexPath.row)?.title, let bodyLabel = getArticle(at: indexPath.row)?.user {
             let titleLabelSize =  getEstimatedHeightAndWidthOfCell(fontSize: 16.0, nameOfFont: "Avenir-Medium", labelString: title)
             let bodyLabelSize  = getEstimatedHeightAndWidthOfCell(fontSize: 11.0, nameOfFont: "Menlo-Italic", labelString: bodyLabel)
-            return CGSize(width: view.frame.width, height: bodyLabelSize.height + titleLabelSize.height + 30)
+            return CGSize(width: view.frame.width, height: bodyLabelSize.height + titleLabelSize.height + 40)
         }
         
         return CGSize.init(width: collectionView.frame.width - 8, height: 40)

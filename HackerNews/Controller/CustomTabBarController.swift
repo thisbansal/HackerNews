@@ -13,26 +13,34 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tabBar.isTranslucent           = true
+//        self.tabBar.isTranslucent           = true
         self.tabBar.barStyle                = .black
+
+        self.tabBar.tintColor               = Color.progressViewTintColor.value
+        self.tabBar.unselectedItemTintColor = Color.lightBackground.value
         
-        self.tabBarItem.titleTextAttributes(for: .highlighted)
+        let layoutForNewsVC                = UICollectionViewFlowLayout()
+        layoutForNewsVC.minimumLineSpacing = 2
         
-        let layoutforNewsVC               = UICollectionViewFlowLayout()
-        let layoutforAskVC                = UICollectionViewFlowLayout()
-        let layoutforShowVC               = UICollectionViewFlowLayout()
-        let layoutforJobsVC               = UICollectionViewFlowLayout()
+        let layoutForAskVC                 = UICollectionViewFlowLayout()
+        layoutForAskVC.minimumLineSpacing  = 2
+        
+        let layoutForShowVC                = UICollectionViewFlowLayout()
+        layoutForShowVC.minimumLineSpacing  = 2
+        
+        let layoutForJobsVC                = UICollectionViewFlowLayout()
+        layoutForJobsVC.minimumLineSpacing  = 2
         
         
-        let newsViewController   = ViewController(collectionViewLayout: layoutforNewsVC)
-        let askViewController    = AskViewController(collectionViewLayout: layoutforAskVC)
-        let showViewController   = ShowViewController(collectionViewLayout: layoutforShowVC)
-        let jobsViewController   = JobsViewController(collectionViewLayout: layoutforJobsVC)
+        let newsViewController   = ViewController(collectionViewLayout: layoutForNewsVC)
+        let askViewController    = AskViewController(collectionViewLayout: layoutForAskVC)
+        let showViewController   = ShowViewController(collectionViewLayout: layoutForShowVC)
+        let jobsViewController   = JobsViewController(collectionViewLayout: layoutForJobsVC)
         
-        self.viewControllers     = [ createViewControllers(title: "News", tagName: 0, imageName: "news", viewController:        newsViewController),
-                                     createViewControllers(title: "Ask",  tagName: 1, imageName: "ask", viewController: askViewController),
+        self.viewControllers     = [ createViewControllers(title: "News", tagName: 0, imageName: "news", viewController: newsViewController),
+                                     createViewControllers(title: "Ask",  tagName: 1, imageName: "ask",  viewController: askViewController),
                                      createViewControllers(title: "Show", tagName: 2, imageName: "show", viewController: showViewController),
-                                     createViewControllers(title: "Jobs", tagName: 3, imageName: "job", viewController: jobsViewController)]
+                                     createViewControllers(title: "Jobs", tagName: 3, imageName: "job",  viewController: jobsViewController)]
     }
     
     private func createViewControllers(title: String, tagName: Int, imageName: String, viewController: UICollectionViewController) -> UINavigationController {
